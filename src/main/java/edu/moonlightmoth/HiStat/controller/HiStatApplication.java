@@ -1,4 +1,4 @@
-package edu.moonlightmoth.HiStat;
+package edu.moonlightmoth.HiStat.controller;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,3 +11,5 @@ public class HiStatApplication {
 	}
 
 }
+
+// curl -X POST -F "file=csv.csv" http://localhost:8080/api/upload-csv

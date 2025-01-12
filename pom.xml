@@ -44,6 +44,24 @@
         <artifactId>spring-boot-starter-test</artifactId>
         <scope>test</scope>
     </dependency>
+
+    <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+    </dependency>
+
+    <dependency>
+        <groupId>org.ejml</groupId>
+        <artifactId>ejml-simple</artifactId>
+        <version>0.39</version>
+    </dependency>
+
+    <dependency>
+        <groupId>gov.nist.math</groupId>
+        <artifactId>jama</artifactId>
+        <version>1.0.3</version>
+    </dependency>
+
 </dependencies>
 
 <build>
