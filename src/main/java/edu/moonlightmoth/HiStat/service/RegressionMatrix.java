@@ -44,7 +44,7 @@ public class RegressionMatrix {
             {
                 for (int k = 0; k < n; k++)
                 {
-                    if (j != k)
+                    if (j != k && polynomialRegressions[i][j][k] != null)
                         abnormalVals.checkSingleXYRegression(polynomialRegressions[i][j][k], basicStat, j, k);
                 }
             }
@@ -87,8 +87,17 @@ public class RegressionMatrix {
 
         Matrix XX = new Matrix(matrixX);
         Matrix YY = new Matrix(matrixY);
+        Matrix B;
 
-        Matrix B = (((XX.transpose().times(XX)).inverse()).times(XX.transpose())).times(YY);
+        try
+        {
+            B = (((XX.transpose().times(XX)).inverse()).times(XX.transpose())).times(YY);
+        }
+        catch (Exception e)
+        {
+            // singular matrix
+            return null;
+        }
 
         return new PolynomialRegression(basicStat.getNames()[x], basicStat.getNames()[y], Arrays.copyOf(B.getColumnPackedCopy(), 5));
 

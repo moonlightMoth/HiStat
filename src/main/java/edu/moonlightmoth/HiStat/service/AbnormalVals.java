@@ -83,4 +83,13 @@ public class AbnormalVals {
         }
     }
 
+    public HashMap<PolynomialRegression, List<Integer>> getxAnomaly()
+    {
+        return xAnomaly;
+    }
+
+    public HashMap<PolynomialRegression, List<Integer>> getyAnomaly()
+    {
+        return yAnomaly;
+    }
 }
