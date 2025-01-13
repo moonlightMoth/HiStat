@@ -126,7 +126,7 @@ public class Report {
             regression.set(namesM[i], nameIndependent);
         }
 
-        basic.set("regression", regression);
+        root.set("regression", regression);
 
         return root.toPrettyString();
     }

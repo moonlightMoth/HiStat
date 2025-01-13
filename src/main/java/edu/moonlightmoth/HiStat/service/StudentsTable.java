@@ -42,10 +42,10 @@ public class StudentsTable {
     public static double lookupCriticVal(double significance, int freedomLevel)
     {
         if (freedomLevel < 0)
-            throw new IllegalArgumentException("Wrong freedom level");
+            throw new IllegalArgumentException("Wrong freedom level. Too few measurements");
 
-        if (significance < 0.0000001 || significance > 0.15)
-            throw new IllegalArgumentException("Wrong significance Level");
+        if (significance < 0.0000001)
+            throw new IllegalArgumentException("Wrong significance Level. Too few measurements");
 
         int freedomIdx;
 
@@ -58,7 +58,7 @@ public class StudentsTable {
         else if (freedomLevel > 120)
             freedomIdx = 33;
         else
-            freedomIdx = freedomLevel-1;
+            freedomIdx = Math.max(freedomLevel - 1, 0);
 
         int significanceIdx;
 

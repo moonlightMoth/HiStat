@@ -85,12 +85,12 @@ public class RegressionMatrix {
             }
         }
 
-        Matrix XX = new Matrix(matrixX);
-        Matrix YY = new Matrix(matrixY);
         Matrix B;
 
         try
         {
+            Matrix XX = new Matrix(matrixX);
+            Matrix YY = new Matrix(matrixY);
             B = (((XX.transpose().times(XX)).inverse()).times(XX.transpose())).times(YY);
         }
         catch (Exception e)

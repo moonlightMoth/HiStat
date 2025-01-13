@@ -38,9 +38,18 @@ public class AbnormalVals {
             }
         }
 
-        Matrix Xn = new Matrix(xnMatrix);
+        Matrix Xn;
+        Matrix H;
 
-        Matrix H = Xn.times(Xn.transpose().times(Xn).inverse()).times(Xn.transpose());
+        try
+        {
+            Xn = new Matrix(xnMatrix);
+            H = Xn.times(Xn.transpose().times(Xn).inverse()).times(Xn.transpose());
+        }
+        catch (Exception e)
+        {
+            return;
+        }
 
         for (int i = 0; i < H.getRowDimension(); i++)
         {
