@@ -22,39 +22,30 @@ public class AbnormalVals {
         int m = basicStat.getNumOfMeasurements();
         int pow = polynomialRegression.getPower();
         double avg = (polynomialRegression.getPower() + 1)/ (double) n;
-
         double[][] xnMatrix = new double[m][pow+1];
 
-        for (int i = 0; i < m; i++)
-        {
+        for (int i = 0; i < m; i++) {
             xnMatrix[i][0] = 1.0;
         }
 
-        for (int i = 0; i < m; i++)
-        {
-            for (int j = 1; j < pow+1; j++)
-            {
+        for (int i = 0; i < m; i++) {
+            for (int j = 1; j < pow+1; j++) {
                 xnMatrix[i][j] = basicStat.getM()[j-1][x][i];
             }
         }
-
         Matrix Xn;
         Matrix H;
 
-        try
-        {
+        try {
             Xn = new Matrix(xnMatrix);
             H = Xn.times(Xn.transpose().times(Xn).inverse()).times(Xn.transpose());
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             return;
         }
 
-        for (int i = 0; i < H.getRowDimension(); i++)
-        {
-            if (Math.abs(H.get(i,i)) >= 1.8 * avg)
-            {
+        for (int i = 0; i < H.getRowDimension(); i++) {
+            if (Math.abs(H.get(i,i)) >= 1.8 * avg) {
                 List<Integer> anoms = xAnomaly.getOrDefault(polynomialRegression, new ArrayList<>());
                 anoms.add(i);
                 xAnomaly.put(polynomialRegression, anoms);
@@ -66,8 +57,7 @@ public class AbnormalVals {
         double[] errors = new double[m];
         double errorSum = 0;
 
-        for (int i = 0; i < m; i++)
-        {
+        for (int i = 0; i < m; i++) {
             errors[i] = sampling[y][i]
                     - coefs[0]
                     - coefs[1] * sampling[x][i]
@@ -77,14 +67,12 @@ public class AbnormalVals {
             errorSum += errors[i]*errors[i];
         }
 
-        for (int i = 0; i < errors.length; i++)
-        {
+        for (int i = 0; i < errors.length; i++) {
             errors[i] = errors[i] *
                     Math.sqrt((m- pow-2)/((1-H.get(i,i))
                             * errorSum - errors[i]*errors[i]));
 
-            if (Math.abs(errors[i]) > StudentsTable.lookupCriticVal(0.475/m, m-pow-1))
-            {
+            if (Math.abs(errors[i]) > StudentsTable.lookupCriticVal(0.475/m, m-pow-1)) {
                 List<Integer> anoms = yAnomaly.getOrDefault(polynomialRegression, new ArrayList<>());
                 anoms.add(i);
                 yAnomaly.put(polynomialRegression, anoms);

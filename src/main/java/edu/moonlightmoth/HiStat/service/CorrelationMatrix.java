@@ -38,7 +38,6 @@ public class CorrelationMatrix {
                         basicStat.getStandardDeviations()[i] / basicStat.getStandardDeviations()[j];
             }
         }
-
     }
 
     public double[][] getCorrelationMatrix()

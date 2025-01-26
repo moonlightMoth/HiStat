@@ -22,40 +22,26 @@ public class FileController {
         if (file.isEmpty() || !file.getOriginalFilename().endsWith(".csv")) {
             return ResponseEntity.badRequest().body("Invalid file. Please upload a CSV file.");
         }
-
         String[] names;
-
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
-            // Split CSV into rows and columns
             names = reader.readLine().split(",");
             List<String> read = new ArrayList<>();
             reader.lines().forEach(read::add);
-
             double[][] sampling = new double[names.length][read.size()];
-
-            for (int i = 0; i < read.size(); i++)
-            {
+            for (int i = 0; i < read.size(); i++) {
                 String[] split = read.get(i).split(",");
-
-                for (int j = 0; j < sampling.length; j++)
-                {
+                for (int j = 0; j < sampling.length; j++) {
                     double parsed;
-
-                    try
-                    {
+                    try {
                         parsed = Double.parseDouble(split[j]);
                     }
-                    catch (NumberFormatException e)
-                    {
+                    catch (NumberFormatException e) {
                         parsed = Double.NaN;
                     }
-
                     sampling[j][i] = parsed;
                 }
             }
-
             Report report = new Report(sampling, names);
-
             return ResponseEntity.ok(report.toJsonString());
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body("Error processing the file: " + e.getMessage());

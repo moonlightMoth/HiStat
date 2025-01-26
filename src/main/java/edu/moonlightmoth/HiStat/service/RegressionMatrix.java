@@ -1,6 +1,7 @@
 package edu.moonlightmoth.HiStat.service;
 
 import Jama.Matrix;
+import Jama.QRDecomposition;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -54,17 +55,12 @@ public class RegressionMatrix {
 
     }
 
-    private PolynomialRegression calculateSingle(int power, int x, int y, BasicStat basicStat)
-    {
-        int n = basicStat.getNumOfVars();
+    private PolynomialRegression calculateSingle(int power, int x, int y, BasicStat basicStat) {
         int m = basicStat.getNumOfMeasurements();
         double[][] matrixX = new double[power+1][power+1];
         matrixX[0][0] = m;
-
-        for (int i = 0; i < power+1; i++)
-        {
-            for (int j = i; j < power+1; j++)
-            {
+        for (int i = 0; i < power+1; i++) {
+            for (int j = i; j < power+1; j++) {
                 if (i == 0 && j == 0)
                     continue;
 
@@ -72,35 +68,26 @@ public class RegressionMatrix {
                 matrixX[j][i] = basicStat.getV()[i+j-1][x];
             }
         }
-
         double[][] matrixY = new double[power+1][1];
         matrixY[0][0] = basicStat.getV()[0][y];
-
-        for (int i = 1; i < power + 1; i++)
-        {
-            for (int j = 0; j < m; j++)
-            {
+        for (int i = 1; i < power + 1; i++) {
+            for (int j = 0; j < m; j++) {
                 if (!Double.isNaN(sampling[x][j]) && !Double.isNaN(sampling[y][j]))
                     matrixY[i][0] = matrixY[i][0] + Math.pow(sampling[x][j], i) * sampling[y][j];
             }
         }
-
         Matrix B;
-
-        try
-        {
+        try {
             Matrix XX = new Matrix(matrixX);
             Matrix YY = new Matrix(matrixY);
-            B = (((XX.transpose().times(XX)).inverse()).times(XX.transpose())).times(YY);
+            B = new QRDecomposition(XX).solve(YY);
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             // singular matrix
             return null;
         }
-
-        return new PolynomialRegression(basicStat.getNames()[x], basicStat.getNames()[y], Arrays.copyOf(B.getColumnPackedCopy(), 5));
-
+        return new PolynomialRegression(basicStat.getNames()[x],
+                basicStat.getNames()[y], Arrays.copyOf(B.getColumnPackedCopy(), 5));
     }
 
     public double[][] getSampling()

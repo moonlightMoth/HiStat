@@ -13,3 +13,6 @@ FROM eclipse-temurin:17
 COPY --from=build /usr/src/app/target/HiStat-0.1.jar /usr/app/HiStat-0.1.jar  
 EXPOSE 80
 CMD ["java","-jar","/usr/app/HiStat-0.1.jar", "--server.port=80"]
+
+
+
