@@ -52,7 +52,7 @@ public class ExponentialRegression implements Regression {
         Matrix B = new LUDecomposition(new Matrix(X)).solve(new Matrix(Y));
 
         double[] beta = B.getColumnPackedCopy();
-        beta[0] = Math.exp(beta[0]);
+        beta[1] = Math.exp(beta[1]);
 
         return new ExponentialRegression(basicStat.getNames()[x],
                 basicStat.getNames()[y], new double[]{beta[1], beta[0]});
