@@ -40,7 +40,7 @@ public class LogarithmicRegression implements Regression {
 
         double[][] sampling = basicStat.getSampling();
         int m = basicStat.getNumOfMeasurements();
-        double[][] lnHelper = new double[m][2];
+        double[][] lnHelper = new double[2][m];
 
         for (int i = 0; i < m; i++)
         {
