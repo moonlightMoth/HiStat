@@ -64,7 +64,7 @@ public class LogarithmicRegression implements Regression {
         double[] beta = B.getColumnPackedCopy();
 
         return new LogarithmicRegression(basicStat.getNames()[x],
-                basicStat.getNames()[y], new double[]{beta[1], beta[0]});
+                basicStat.getNames()[y], new double[]{beta[0], beta[1]});
     }
 
     public String getIndependentName()
