@@ -1,20 +1,20 @@
-package edu.moonlightmoth.HiStat.service;
+package edu.moonlightmoth.HiStat.model;
+
+import edu.moonlightmoth.HiStat.service.BasicStat;
+import edu.moonlightmoth.HiStat.service.Regression;
 
 import java.util.Arrays;
 import java.util.Objects;
 
-public class PolynomialRegression {
+public class PowerRegression implements Regression {
 
     private final String independentName;
     private final String dependentName;
     private final double[] coefficients;
     private final int power;
 
-    PolynomialRegression(String independentName, String dependentName, double[] coefficients)
+    PowerRegression(String independentName, String dependentName, double[] coefficients)
     {
-        if (coefficients.length != 5)
-            throw new IllegalArgumentException("must be 5 coefficients");
-
         this.dependentName = dependentName;
         this.independentName = independentName;
         this.coefficients = Arrays.copyOf(coefficients,5);
@@ -27,6 +27,11 @@ public class PolynomialRegression {
             k++;
         }
         power = k;
+    }
+
+    public static Regression calculate(int power, int x, int y, BasicStat basicStat)
+    {
+        return null; //TODO
     }
 
 
@@ -45,6 +50,12 @@ public class PolynomialRegression {
         return coefficients;
     }
 
+    @Override
+    public RegressionType getType()
+    {
+        return RegressionType.POWER;
+    }
+
     public int getPower()
     {
         return power;
@@ -55,7 +66,7 @@ public class PolynomialRegression {
     {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PolynomialRegression that = (PolynomialRegression) o;
+        PowerRegression that = (PowerRegression) o;
         return Objects.equals(independentName, that.independentName) && Objects.equals(dependentName, that.dependentName) && Arrays.equals(coefficients, that.coefficients);
     }
 

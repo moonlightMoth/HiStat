@@ -3,11 +3,10 @@ package edu.moonlightmoth.HiStat.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import edu.moonlightmoth.HiStat.model.PolynomialRegression;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.BiConsumer;
 
 public class Report {
 
@@ -80,7 +79,7 @@ public class Report {
         root.set("sampling", sampling);
 
         ObjectNode regression = mapper.createObjectNode();
-        PolynomialRegression[][][] regressionM = regressionMatrix.getPolynomialRegressions();
+        Regression[][][] regressionM = regressionMatrix.getRegressions();
 
 
         for (int i = 0; i < basicStat.getNumOfVars(); i++)
@@ -91,34 +90,43 @@ public class Report {
                 if (i!=j)
                 {
                     ObjectNode dependentName = mapper.createObjectNode();
-                    for (int k = 0; k < 4; k++)
+                    for (int k = 0; k < 7; k++)
                     {
-                        ObjectNode power = mapper.createObjectNode();
+                        Regression reg = regressionM[k][i][j];
+                        if (reg == null)
+                            continue;
+
+                        ObjectNode type = mapper.createObjectNode();
                         ArrayNode coefs = mapper.createArrayNode();
                         ArrayNode anomsX = mapper.createArrayNode();
                         ArrayNode anomsY = mapper.createArrayNode();
-                        PolynomialRegression polynomialRegression = regressionM[k][i][j];
-
-                        if (polynomialRegression == null)
-                            continue;
 
                         for (int l = 0; l < 5; l++)
                         {
-                            coefs.add(polynomialRegression.getCoefficients()[l]);
+                            coefs.add(reg.getCoefficients()[l]);
                         }
 
-                        List<Integer> a = regressionMatrix.getAbnormalVals().getxAnomaly().get(polynomialRegression);
+                        List<Integer> a = regressionMatrix.getAbnormalVals().getxAnomaly().get(reg);
                         if (a != null)
                             a.forEach(anomsX::add);
 
-                        List<Integer> b = regressionMatrix.getAbnormalVals().getyAnomaly().get(polynomialRegression);
+                        List<Integer> b = regressionMatrix.getAbnormalVals().getyAnomaly().get(reg);
                         if (b != null)
                             b.forEach(anomsY::add);
 
-                        power.set("coefs", coefs);
-                        power.set("anomsx", anomsX);
-                        power.set("anomsy", anomsY);
-                        dependentName.set(Integer.toString(polynomialRegression.getPower()-1), power);
+                        type.set("coefs", coefs);
+                        type.set("anomsx", anomsX);
+                        type.set("anomsy", anomsY);
+
+                        switch (reg.getType())
+                        {
+                            case POLYNOMIAL -> dependentName.set(Integer.toString(((PolynomialRegression)reg).getPower()-1), type);
+                            case POWER -> dependentName.set("pow", type);
+                            case EXPONENTIAL -> dependentName.set("exp", type);
+                            case LOGARITHMIC -> dependentName.set("log", type);
+                        }
+
+
                     }
                     nameIndependent.set(namesM[j], dependentName);
                 }
