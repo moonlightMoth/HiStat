@@ -1,5 +1,7 @@
 package edu.moonlightmoth.HiStat.model;
 
+import Jama.LUDecomposition;
+import Jama.Matrix;
 import edu.moonlightmoth.HiStat.service.BasicStat;
 import edu.moonlightmoth.HiStat.service.Regression;
 
@@ -32,7 +34,37 @@ public class LogarithmicRegression implements Regression {
 
     public static Regression calculate(int power, int x, int y, BasicStat basicStat)
     {
-        return null; //TODO
+        double sumLns = 0;
+        double sumLnSquares = 0;
+        double sumYLns = 0;
+
+        double[][] sampling = basicStat.getSampling();
+        int m = basicStat.getNumOfMeasurements();
+        double[][] lnHelper = new double[m][2];
+
+        for (int i = 0; i < m; i++)
+        {
+            lnHelper[0][i] = Math.log(sampling[x][i]);
+            lnHelper[1][i] = lnHelper[0][1] * lnHelper[0][1];
+        }
+
+        for (int i = 0; i < m; i++)
+        {
+            sumLns = sumLns + lnHelper[0][i];
+            sumLnSquares = sumLnSquares + lnHelper[1][i];
+            sumYLns = sumYLns + sampling[y][i] * lnHelper[0][i];
+        }
+
+
+        double[][] X = new double[][]{{sumLnSquares, sumLns},{sumLns, m}};
+        double[][] Y = new double[][]{{sumYLns}, {basicStat.getV()[0][y]}};
+
+        Matrix B = new LUDecomposition(new Matrix(X)).solve(new Matrix(Y));
+
+        double[] beta = B.getColumnPackedCopy();
+
+        return new ExponentialRegression(basicStat.getNames()[x],
+                basicStat.getNames()[y], new double[]{beta[1], beta[0]});
     }
 
     public String getIndependentName()
