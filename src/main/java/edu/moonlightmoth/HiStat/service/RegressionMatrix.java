@@ -1,5 +1,6 @@
 package edu.moonlightmoth.HiStat.service;
 
+import Jama.LUDecomposition;
 import Jama.Matrix;
 import Jama.QRDecomposition;
 
@@ -80,7 +81,8 @@ public class RegressionMatrix {
         try {
             Matrix XX = new Matrix(matrixX);
             Matrix YY = new Matrix(matrixY);
-            B = new QRDecomposition(XX).solve(YY);
+            //B = new QRDecomposition(XX).solve(YY);
+            B = new LUDecomposition(XX).solve(YY);
         }
         catch (Exception e) {
             // singular matrix
