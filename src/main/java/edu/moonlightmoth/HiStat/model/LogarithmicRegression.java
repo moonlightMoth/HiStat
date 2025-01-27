@@ -15,7 +15,7 @@ public class LogarithmicRegression implements Regression {
     private final double[] coefficients;
     private final int power;
 
-    LogarithmicRegression(String independentName, String dependentName, double[] coefficients)
+    private LogarithmicRegression(String independentName, String dependentName, double[] coefficients)
     {
         this.dependentName = dependentName;
         this.independentName = independentName;
@@ -63,7 +63,7 @@ public class LogarithmicRegression implements Regression {
 
         double[] beta = B.getColumnPackedCopy();
 
-        return new ExponentialRegression(basicStat.getNames()[x],
+        return new LogarithmicRegression(basicStat.getNames()[x],
                 basicStat.getNames()[y], new double[]{beta[1], beta[0]});
     }
 
