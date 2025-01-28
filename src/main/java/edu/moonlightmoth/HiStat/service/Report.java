@@ -3,7 +3,8 @@ package edu.moonlightmoth.HiStat.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import edu.moonlightmoth.HiStat.model.PolynomialRegression;
+import edu.moonlightmoth.HiStat.regression.PolynomialRegression;
+import edu.moonlightmoth.HiStat.regression.Regression;
 
 import java.util.List;
 import java.util.Objects;
@@ -117,13 +118,18 @@ public class Report {
                         type.set("coefs", coefs);
                         type.set("anomsx", anomsX);
                         type.set("anomsy", anomsY);
+                        type.put("det", reg.getDeterminationCoefficient());
 
                         switch (reg.getType())
                         {
-                            case POLYNOMIAL -> dependentName.set(Integer.toString(((PolynomialRegression)reg).getPower()-1), type);
+                            case LINEAR -> dependentName.set("1", type);
+                            case QUADRATIC -> dependentName.set("2", type);
+                            case CUBIC -> dependentName.set("3", type);
+                            case POLYNOMIAL4 -> dependentName.set("4", type);
                             case POWER -> dependentName.set("pow", type);
                             case EXPONENTIAL -> dependentName.set("exp", type);
                             case LOGARITHMIC -> dependentName.set("log", type);
+                            case UNDEFINED -> throw new RuntimeException("Cannot convert UNDEFINED to JSON");
                         }
 
 

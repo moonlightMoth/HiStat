@@ -1,25 +1,29 @@
-package edu.moonlightmoth.HiStat.model;
+package edu.moonlightmoth.HiStat.regression;
 
 import Jama.LUDecomposition;
 import Jama.Matrix;
 import edu.moonlightmoth.HiStat.service.BasicStat;
-import edu.moonlightmoth.HiStat.service.Regression;
 
 import java.util.Arrays;
 import java.util.Objects;
 
-public class PolynomialRegression implements Regression {
+public class PolynomialRegression extends Regression {
 
-    private final String independentName;
-    private final String dependentName;
-    private final double[] coefficients;
     private final int power;
 
-    private PolynomialRegression(String independentName, String dependentName, double[] coefficients)
+    private PolynomialRegression(String independentName,
+                                 String dependentName,
+                                 double[] coefficients,
+                                 int x,
+                                 int y,
+                                 BasicStat basicStat)
     {
-        this.dependentName = dependentName;
-        this.independentName = independentName;
-        this.coefficients = Arrays.copyOf(coefficients,5);
+        super(independentName, dependentName, coefficients, x, y, basicStat,
+                value -> coefficients[0] +
+                        coefficients[1]*basicStat.getSampling()[x][value] +
+                        coefficients[2]*Math.pow(basicStat.getSampling()[x][value], 2) +
+                        coefficients[3]*Math.pow(basicStat.getSampling()[x][value], 3) +
+                        coefficients[4]*Math.pow(basicStat.getSampling()[x][value], 4));
 
         int k = 0;
         for (int i = 0; i < coefficients.length; i++)
@@ -28,10 +32,10 @@ public class PolynomialRegression implements Regression {
                 break;
             k++;
         }
-        power = k;
+        power = k-1;
     }
 
-    public static PolynomialRegression calculate(int power, int x, int y, BasicStat basicStat)
+    static PolynomialRegression calculate(int power, int x, int y, BasicStat basicStat)
     {
         int m = basicStat.getNumOfMeasurements();
         double[][] sampling = basicStat.getSampling();
@@ -64,24 +68,13 @@ public class PolynomialRegression implements Regression {
             // singular matrix
             return null;
         }
-        return new PolynomialRegression(basicStat.getNames()[x],
-                basicStat.getNames()[y], Arrays.copyOf(B.getColumnPackedCopy(), 5));
-    }
-
-
-    public String getIndependentName()
-    {
-        return independentName;
-    }
-
-    public String getDependentName()
-    {
-        return dependentName;
-    }
-
-    public double[] getCoefficients()
-    {
-        return coefficients;
+        return new PolynomialRegression(
+                basicStat.getNames()[x],
+                basicStat.getNames()[y],
+                Arrays.copyOf(B.getColumnPackedCopy(), 5),
+                x,
+                y,
+                basicStat);
     }
 
     public int getPower()
@@ -92,8 +85,16 @@ public class PolynomialRegression implements Regression {
     @Override
     public RegressionType getType()
     {
-        return RegressionType.POLYNOMIAL;
+        return switch (power)
+                {
+                    case 1 -> RegressionType.LINEAR;
+                    case 2 -> RegressionType.QUADRATIC;
+                    case 3 -> RegressionType.CUBIC;
+                    case 4 -> RegressionType.POLYNOMIAL4;
+                    default -> RegressionType.UNDEFINED;
+                };
     }
+
 
     @Override
     public boolean equals(Object o)

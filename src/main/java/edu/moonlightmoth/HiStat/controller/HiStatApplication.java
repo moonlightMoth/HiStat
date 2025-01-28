@@ -12,4 +12,4 @@ public class HiStatApplication {
 
 }
 
-// curl -X POST -F "file=csv.csv" http://localhost:8080/api/upload-csv
+// curl -X POST -F "file=@mini.csv" http://localhost:8080/api/calculate

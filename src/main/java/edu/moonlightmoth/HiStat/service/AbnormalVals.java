@@ -1,9 +1,7 @@
 package edu.moonlightmoth.HiStat.service;
 
-import Jama.Matrix;
-import edu.moonlightmoth.HiStat.model.PolynomialRegression;
+import edu.moonlightmoth.HiStat.regression.Regression;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 

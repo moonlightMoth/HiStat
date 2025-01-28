@@ -1,9 +1,6 @@
 package edu.moonlightmoth.HiStat.service;
 
-import edu.moonlightmoth.HiStat.model.ExponentialRegression;
-import edu.moonlightmoth.HiStat.model.LogarithmicRegression;
-import edu.moonlightmoth.HiStat.model.PolynomialRegression;
-import edu.moonlightmoth.HiStat.model.PowerRegression;
+import edu.moonlightmoth.HiStat.regression.*;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -27,16 +24,20 @@ public class RegressionMatrix {
         regressions = new Regression[7][n][n];
         abnormalVals = new AbnormalVals();
 
-        for (int i = 0; i < 4; i++)
+        for (int j = 0; j < n; j++)
         {
-            for (int j = 0; j < n; j++)
+            for (int k = 0; k < n; k++)
             {
-                for (int k = 0; k < n; k++)
+                if (j != k)
                 {
-                    if (j != k)
-                    {
-                        regressions[i][j][k] = PolynomialRegression.calculate(i+1, j, k, basicStat);
-                    }
+                    regressions[0][j][k] = RegressionBuilder.
+                            build(RegressionType.LINEAR, j, k, basicStat);
+                    regressions[1][j][k] = RegressionBuilder.
+                            build(RegressionType.QUADRATIC, j, k, basicStat);
+                    regressions[2][j][k] = RegressionBuilder.
+                            build(RegressionType.CUBIC, j, k, basicStat);
+                    regressions[3][j][k] = RegressionBuilder.
+                            build(RegressionType.POLYNOMIAL4, j, k, basicStat);
                 }
             }
         }
@@ -48,9 +49,12 @@ public class RegressionMatrix {
             {
                 if (j != k)
                 {
-                    regressions[4][j][k] = LogarithmicRegression.calculate(0,j, k, basicStat);
-                    regressions[5][j][k] = PowerRegression.calculate(0,j, k, basicStat);
-                    regressions[6][j][k] = ExponentialRegression.calculate(0,j, k, basicStat);
+                    regressions[4][j][k] = RegressionBuilder.
+                            build(RegressionType.LOGARITHMIC, j,k,basicStat);
+                    regressions[5][j][k] = RegressionBuilder.
+                            build(RegressionType.POWER, j,k,basicStat);
+                    regressions[6][j][k] = RegressionBuilder.
+                            build(RegressionType.EXPONENTIAL, j,k,basicStat);
                 }
             }
         }
