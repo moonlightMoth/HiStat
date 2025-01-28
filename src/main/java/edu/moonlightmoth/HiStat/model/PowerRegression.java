@@ -1,5 +1,7 @@
 package edu.moonlightmoth.HiStat.model;
 
+import Jama.LUDecomposition;
+import Jama.Matrix;
 import edu.moonlightmoth.HiStat.service.BasicStat;
 import edu.moonlightmoth.HiStat.service.Regression;
 
@@ -13,7 +15,7 @@ public class PowerRegression implements Regression {
     private final double[] coefficients;
     private final int power;
 
-    PowerRegression(String independentName, String dependentName, double[] coefficients)
+    private PowerRegression(String independentName, String dependentName, double[] coefficients)
     {
         this.dependentName = dependentName;
         this.independentName = independentName;
@@ -31,7 +33,37 @@ public class PowerRegression implements Regression {
 
     public static Regression calculate(int power, int x, int y, BasicStat basicStat)
     {
-        return null; //TODO
+        double sumLns = 0;
+        double sumLnSquares = 0;
+        double sumXYLns = 0;
+        double sumYLns = 0;
+
+        double[][] sampling = basicStat.getSampling();
+        int m = basicStat.getNumOfMeasurements();
+        double[] xLnHelper = new double[m];
+        double[] yLnHelper = new double[m];
+
+        for (int i = 0; i < m; i++)
+        {
+            xLnHelper[i] = Math.log(sampling[x][i]);
+            sumLnSquares += xLnHelper[i] * xLnHelper[i];
+            sumLns = sumLns + xLnHelper[i];
+            yLnHelper[i] = Math.log(sampling[y][i]);
+            sumYLns += yLnHelper[i];
+            sumXYLns = sumXYLns + yLnHelper[i] * xLnHelper[i];
+        }
+
+
+        double[][] X = new double[][]{{m, sumLns},{sumLns, sumLnSquares}};
+        double[][] Y = new double[][]{{sumYLns}, {sumXYLns}};
+
+        Matrix B = new LUDecomposition(new Matrix(X)).solve(new Matrix(Y));
+
+        double[] beta = B.getColumnPackedCopy();
+        beta[0] = Math.exp(beta[0]);
+
+        return new PowerRegression(basicStat.getNames()[x],
+                basicStat.getNames()[y], new double[]{beta[0], beta[1]});
     }
 
 

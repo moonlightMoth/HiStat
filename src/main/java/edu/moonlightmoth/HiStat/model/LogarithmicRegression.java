@@ -46,15 +46,11 @@ public class LogarithmicRegression implements Regression {
         {
             lnHelper[0][i] = Math.log(sampling[x][i]);
             lnHelper[1][i] = lnHelper[0][i] * lnHelper[0][i];
-        }
 
-        for (int i = 0; i < m; i++)
-        {
             sumLns = sumLns + lnHelper[0][i];
             sumLnSquares = sumLnSquares + lnHelper[1][i];
             sumYLns = sumYLns + sampling[y][i] * lnHelper[0][i];
         }
-
 
         double[][] X = new double[][]{{sumLnSquares, sumLns},{sumLns, m}};
         double[][] Y = new double[][]{{sumYLns}, {basicStat.getV()[0][y]}};
