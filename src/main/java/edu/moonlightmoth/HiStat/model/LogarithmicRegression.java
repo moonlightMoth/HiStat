@@ -45,7 +45,7 @@ public class LogarithmicRegression implements Regression {
         for (int i = 0; i < m; i++)
         {
             lnHelper[0][i] = Math.log(sampling[x][i]);
-            lnHelper[1][i] = lnHelper[0][1] * lnHelper[0][1];
+            lnHelper[1][i] = lnHelper[0][i] * lnHelper[0][i];
         }
 
         for (int i = 0; i < m; i++)
