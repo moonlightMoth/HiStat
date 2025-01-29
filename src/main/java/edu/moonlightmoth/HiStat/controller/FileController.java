@@ -28,6 +28,13 @@ public class FileController {
             names = reader.readLine().split(",");
             List<String> read = new ArrayList<>();
             reader.lines().forEach(read::add);
+
+            for (int i = read.size()-1; i >= 0; i--)
+            {
+                if (read.get(i).isEmpty())
+                    read.remove(i);
+            }
+
             double[][] sampling = new double[names.length][read.size()];
             for (int i = 0; i < read.size(); i++) {
                 String[] split = read.get(i).split(",");

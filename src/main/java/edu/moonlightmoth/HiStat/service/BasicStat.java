@@ -80,7 +80,9 @@ public class BasicStat {
             for (int j = 0; j < numOfMeasurements; j++)
             {
                 if (Double.isNaN(sampling[i][j]))
+                {
                     sampling[i][j] = averages[i];
+                }
             }
         }
     }
