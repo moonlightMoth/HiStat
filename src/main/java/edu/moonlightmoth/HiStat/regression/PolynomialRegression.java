@@ -25,14 +25,14 @@ public class PolynomialRegression extends Regression {
                         coefficients[3]*Math.pow(basicStat.getSampling()[x][value], 3) +
                         coefficients[4]*Math.pow(basicStat.getSampling()[x][value], 4));
 
-        int k = 0;
-        for (int i = 0; i < coefficients.length; i++)
+        int k = 4;
+        for (int i = 4; i >=0; i--)
         {
-            if (coefficients[i] == 0)
+            if (coefficients[i] != 0.0)
                 break;
-            k++;
+            k--;
         }
-        power = k-1;
+        power = k;
     }
 
     static PolynomialRegression calculate(int power, int x, int y, BasicStat basicStat)
