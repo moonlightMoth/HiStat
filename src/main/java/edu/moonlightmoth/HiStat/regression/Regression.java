@@ -68,7 +68,7 @@ public abstract class Regression {
             upper = upper + Math.pow(sampling[y][i] - function.applyAsDouble(i),2);
         }
 
-        return Double.isFinite(1 - (upper/downer)) ? 1 - (upper/downer) : Double.NaN;
+        return Double.isFinite(1 - (upper/downer)) ? 1 - (upper/downer) : 0.0;
     }
 
 
