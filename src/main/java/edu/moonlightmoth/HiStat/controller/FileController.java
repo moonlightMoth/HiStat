@@ -31,7 +31,7 @@ public class FileController {
             double[][] sampling = new double[names.length][read.size()];
             for (int i = 0; i < read.size(); i++) {
                 String[] split = read.get(i).split(",");
-                for (int j = 0; j < sampling.length; j++) {
+                for (int j = 0; j < split.length; j++) {
                     double parsed;
                     try {
                         parsed = Double.parseDouble(split[j]);
