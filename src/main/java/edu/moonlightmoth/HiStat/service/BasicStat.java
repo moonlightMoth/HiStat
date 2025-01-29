@@ -34,6 +34,7 @@ public class BasicStat {
 
         countNaNs();
         findAverages();
+        fillAbsent();
         findStdDeviationsAndDispersions();
         mAndVCalc();
 
@@ -69,6 +70,18 @@ public class BasicStat {
                     averages[i] += sampling[i][j];
             }
             averages[i] = averages[i]/(numOfMeasurements-numOfNaNs[i]);
+        }
+    }
+
+    private void fillAbsent()
+    {
+        for (int i = 0; i < numOfVars; i++)
+        {
+            for (int j = 0; j < numOfMeasurements; j++)
+            {
+                if (Double.isNaN(sampling[i][j]))
+                    sampling[i][j] = averages[i];
+            }
         }
     }
 

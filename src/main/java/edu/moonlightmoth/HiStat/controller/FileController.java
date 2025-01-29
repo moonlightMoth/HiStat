@@ -23,7 +23,8 @@ public class FileController {
             return ResponseEntity.badRequest().body("Invalid file. Please upload a CSV file.");
         }
         String[] names;
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(file.getInputStream()))) {
             names = reader.readLine().split(",");
             List<String> read = new ArrayList<>();
             reader.lines().forEach(read::add);
@@ -44,7 +45,8 @@ public class FileController {
             Report report = new Report(sampling, names);
             return ResponseEntity.ok(report.toJsonString());
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("Error processing the file: " + e.getMessage());
+            return ResponseEntity.internalServerError()
+                    .body("Error processing the file: " + e.getMessage());
         }
     }
 }
