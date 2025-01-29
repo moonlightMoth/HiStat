@@ -55,7 +55,7 @@ public class PowerRegression extends Regression {
         double[][] X = new double[][]{{m, sumLns},{sumLns, sumLnSquares}};
         double[][] Y = new double[][]{{sumYLns}, {sumXYLns}};
 
-        Matrix B = new LUDecomposition(new Matrix(X)).solve(new Matrix(Y));
+        Matrix B =  new Matrix(X).inverse().times(new Matrix(Y));
 
         double[] beta = B.getColumnPackedCopy();
         beta[0] = Math.exp(beta[0]);

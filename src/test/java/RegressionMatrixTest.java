@@ -35,5 +35,7 @@ public class RegressionMatrixTest {
 
         BasicStat basicStat = new BasicStat(testSampling, testNames);
         RegressionMatrix regressionMatrix = new RegressionMatrix(basicStat);
+
     }
+
 }

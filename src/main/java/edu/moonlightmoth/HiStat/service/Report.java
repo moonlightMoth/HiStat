@@ -99,25 +99,14 @@ public class Report {
 
                         ObjectNode type = mapper.createObjectNode();
                         ArrayNode coefs = mapper.createArrayNode();
-                        ArrayNode anomsX = mapper.createArrayNode();
-                        ArrayNode anomsY = mapper.createArrayNode();
 
                         for (int l = 0; l < 5; l++)
                         {
                             coefs.add(reg.getCoefficients()[l]);
                         }
 
-                        List<Integer> a = regressionMatrix.getAbnormalVals().getxAnomaly().get(reg);
-                        if (a != null)
-                            a.forEach(anomsX::add);
-
-                        List<Integer> b = regressionMatrix.getAbnormalVals().getyAnomaly().get(reg);
-                        if (b != null)
-                            b.forEach(anomsY::add);
 
                         type.set("coefs", coefs);
-                        type.set("anomsx", anomsX);
-                        type.set("anomsy", anomsY);
                         type.put("det", reg.getDeterminationCoefficient());
 
                         switch (reg.getType())

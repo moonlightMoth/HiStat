@@ -43,7 +43,7 @@ public class ExponentialRegression extends Regression {
         double[][] X = new double[][]{{v[1][x], v[0][x]},{v[0][x], m}};
         double[][] Y = new double[][]{{sum0}, {sum1}};
 
-        Matrix B = new LUDecomposition(new Matrix(X)).solve(new Matrix(Y));
+        Matrix B =  new Matrix(X).inverse().times(new Matrix(Y));
 
         double[] beta = B.getColumnPackedCopy();
         beta[1] = Math.exp(beta[1]);

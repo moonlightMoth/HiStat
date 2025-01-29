@@ -62,7 +62,7 @@ public class PolynomialRegression extends Regression {
         try {
             Matrix XX = new Matrix(matrixX);
             Matrix YY = new Matrix(matrixY);
-            B = new LUDecomposition(XX).solve(YY);
+            B = XX.inverse().times(YY);
         }
         catch (Exception e) {
             // singular matrix

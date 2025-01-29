@@ -46,7 +46,7 @@ public class LogarithmicRegression extends Regression {
         double[][] X = new double[][]{{sumLnSquares, sumLns},{sumLns, m}};
         double[][] Y = new double[][]{{sumYLns}, {basicStat.getV()[0][y]}};
 
-        Matrix B = new LUDecomposition(new Matrix(X)).solve(new Matrix(Y));
+        Matrix B = new Matrix(X).inverse().times(new Matrix(Y));
 
         double[] beta = B.getColumnPackedCopy();
 

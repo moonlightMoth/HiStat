@@ -9,7 +9,6 @@ public class RegressionMatrix {
 
     private double[][] sampling;
     private Regression[][][] regressions;
-    private AbnormalVals abnormalVals;
 
     public RegressionMatrix(BasicStat basicStat)
     {
@@ -22,7 +21,6 @@ public class RegressionMatrix {
         int n = basicStat.getNumOfVars();
 
         regressions = new Regression[7][n][n];
-        abnormalVals = new AbnormalVals();
 
         for (int j = 0; j < n; j++)
         {
@@ -58,21 +56,6 @@ public class RegressionMatrix {
                 }
             }
         }
-
-
-//        for (int i = 0; i < 4; i++)
-//        {
-//            for (int j = 0; j < n; j++)
-//            {
-//                for (int k = 0; k < n; k++)
-//                {
-//                    if (j != k && regressions[i][j][k] != null)
-//                        abnormalVals.checkSingleXYRegression(regressions[i][j][k], basicStat, j, k);
-//                }
-//            }
-//        }
-
-
     }
 
     public double[][] getSampling()
@@ -85,25 +68,19 @@ public class RegressionMatrix {
         return regressions;
     }
 
-    public AbnormalVals getAbnormalVals()
-    {
-        return abnormalVals;
-    }
-
     @Override
     public boolean equals(Object o)
     {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RegressionMatrix that = (RegressionMatrix) o;
-        return Arrays.equals(sampling, that.sampling) && Arrays.equals(regressions, that.regressions) && Objects.equals(abnormalVals, that.abnormalVals);
+        return Arrays.equals(sampling, that.sampling) && Arrays.equals(regressions, that.regressions);
     }
 
     @Override
     public int hashCode()
     {
-        int result = Objects.hash(abnormalVals);
-        result = 31 * result + Arrays.hashCode(sampling);
+        int result = Arrays.hashCode(sampling);
         result = 31 * result + Arrays.hashCode(regressions);
         return result;
     }
